@@ -1,0 +1,70 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: {{ .Values.zyterchatservice.name }}
+    tier: {{ .Values.zyterchatservice.tier }}
+    env: {{ .Values.env }}
+  name: {{ .Values.zyterchatservice.name }}
+spec:
+  replicas: {{ .Values.zyterchatservice.replicas | int }}
+  selector:
+    matchLabels:
+      app: {{ .Values.zyterchatservice.name }}
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.zyterchatservice.name }}
+    spec:
+      containers:
+      - image: {{ .Values.registry }}/{{ .Values.zyterchatservice.name }}:{{ .Values.zyterchatservice.tag }}
+        name: {{ .Values.zyterchatservice.name }}
+        resources:
+          requests:
+            memory: {{ .Values.zyterchatservice.mem_request }}
+            cpu: {{ .Values.zyterchatservice.cpu_request }}
+            ephemeral-storage: {{ .Values.zyterchatservice.storage_request }}
+          limits:
+            memory: {{ .Values.zyterchatservice.mem_limit }}
+            cpu: {{ .Values.zyterchatservice.cpu_limit }}
+            ephemeral-storage: {{ .Values.zyterchatservice.storage_limit }}
+        envFrom:
+        - configMapRef:
+            name: {{ .Values.env_cm_name }}
+        volumeMounts:
+        - name: "{{ .Values.zyterchatservice.name }}-config"
+          mountPath: {{ .Values.zyterchatservice.config_path }}
+          subPath: {{ .Values.application_properties_sub_path }}
+          readOnly: {{ .Values.zyter_cm_read_only }}
+        - name: "{{ .Values.zyterchatservice.name }}-ssl-cert"
+          mountPath: {{ .Values.zyterchatservice.ssl_cert_path }}
+          subPath: {{ .Values.CERT_NAME }}
+        - name: {{ .Values.tomcat_server_cm_name }}
+          mountPath: {{ .Values.tomcat_server_path }}
+          subPath: {{ .Values.tomcat_server_config_file_name }}
+        - name: {{ .Values.chat_mount_name }}
+          mountPath: {{ .Values.chat_mount_path }}
+      volumes:
+      - name: "{{ .Values.zyterchatservice.name }}-config"
+        configMap: 
+          name: {{ .Values.zyterchatservice.name }}
+          items:
+          - key: {{ .Values.zyter_cm_key }}
+            path: {{ .Values.zyter_cm_relative_path }}
+      - name: "{{ .Values.zyterchatservice.name }}-ssl-cert"
+        secret:
+          secretName: {{ .Values.zyter_ssl_cert_secret_name }}
+          items:
+          - key: {{  .Values.ssl_cert_secret_key }}
+            path: {{ .Values.CERT_NAME }}
+      - name: {{ .Values.tomcat_server_cm_name }}
+        configMap:
+          name: {{ .Values.tomcat_server_cm_name }}
+          items:
+          - key: {{ .Values.tomcat_server_config_key_name }}
+            path: {{ .Values.tomcat_server_config_file_name }}
+      - name: {{ .Values.chat_mount_name }}
+        persistentVolumeClaim:
+           claimName: {{ .Values.persistent_claim_name }}
+status: {}

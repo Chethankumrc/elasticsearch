@@ -1,0 +1,574 @@
+#############################
+# Configuration variables
+
+env: "dev"
+
+app_name: "collaborate"
+
+domain_name: "clb-dev.zyterk8s.net"
+
+intra_cluster_comm_protocol: "http"
+
+registry: "226861556001.dkr.ecr.us-east-2.amazonaws.com"
+
+env_cm_name: "zyter-env-cm"
+
+sso_cn_env_cm_name: "zyter-sso-cn-env-cm"
+
+sso_member_env_cm_name: "zyter-sso-member-env-cm"
+
+zyter_ssl_cert_secret_name: "zyter-ssl-cert"
+
+ssl_cert_secret_key: "zyter-ssl-cert"
+
+tomcat_server_cm_name: "tomcat-server"
+
+tomcat_server_config_key_name: "server"
+
+allowPermissionsAPI: "true"
+
+# linked with another value called "CERT_NAME"
+tomcat_server_ssl_cert_path: "/opt/zyter/certificates/zyternet.pfx"
+
+# linked with another value called "tomcat_server_path"
+tomcat_server_config_file_name: "server.xml"
+
+tomcat_server_path: "/opt/tomcat/conf/server.xml"
+
+container_port: "80"
+
+cluster_ip_service_port: "80"
+
+trucare_ip: "172.31.43.164"
+
+# linked with another value called SSO_WHITELISTED_IPS
+trucare_host: "en.aws.cninc.com"
+
+trucare_url_scheme: "http"
+
+trucare_backend_port: "80"
+
+mysql_ext_svc_name: "mysqlhost"
+
+redis_ext_svc_name: "redishost"
+
+main_schema: "COLLABORATE"
+
+support_schema: "COLLABORATE_RPM1"
+
+#################################
+# Env variables
+
+DB_HOST: "evernorth-k8s-rds.cluster-commu56smcod.us-east-2.rds.amazonaws.com"
+DB_USER: "k8sUser"
+DB_NAME: "COLLABORATE"
+AWS_REGION: "us-east-2"
+DB_PORT: "3306"
+DB_CERT_PATH: "/opt/zyter/certificates/rds-ca-2019-root.pem"
+RDS_IAM_AWS_ACCESS_KEY_ID: "AKIATJUQAUEQ6QGWVVSH"
+RDS_IAM_AWS_SECRET_ACCESS_KEY: "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"
+
+REDIS_HOST: "evernorth-k8s-redis-001.f7kdyz.0001.use2.cache.amazonaws.com"
+
+AUTH_DB_NAME: "COLLABORATE"
+SSO_DB_NAME: "COLLABORATE"
+MAX_LIFETIME: "600000"
+CONNECTION_TIMEOUT: "50000"
+MAXIMUM_POOL_SIZE: "1500"
+
+# linked with a list of values under Image level variables, the property being "ssl_cert_path"
+CERT_NAME: "zyternet.pfx"
+CERT_PWRD: "india@123"
+CERT_ALIAS: "1"
+SSO_WHITELISTED_IPS: "zyter.okta.com collaborate.zyterk8s.net clb-dev-cn-signin.zyterk8s.net clb-dev-member-signin.zyterk8s.net http://en.aws.cninc.com"
+
+TRUCARE_IDP_REALM: "/cn"
+TRUCARE_PORT: "8090"
+# linked with another value called "sso_saml_ssl_path"
+TRUCARE_PRIVATE_KEY: "/opt/zyter/sso/ssl/tls.key"
+# linked with another value called "sso_saml_ssl_path"
+TRUCARE_CERT: "/opt/zyter/sso/ssl/tls.crt"
+# linked with another value called "zytersso_cn.cn_metadata_file_name"
+TRUCARE_METADATA: "/opt/zyter/certificates/cn-metadata.xml"
+
+EVERNORTH_IDP_REALM: "/member"
+EVERNORTH_PORT: "8091"
+# linked with another value called "sso_saml_ssl_path"
+EVERNORTH_PRIVATE_KEY: "/opt/zyter/sso/ssl/tls.key"
+# linked with another value called "sso_saml_ssl_path"
+EVERNORTH_CERT: "/opt/zyter/sso/ssl/tls.crt"
+# linked with another value called "zytersso_member.member_metadata_file_name"
+EVERNORTH_METADATA: "/opt/zyter/certificates/member-metadata.xml"
+
+#############################
+# ALB related variables
+
+alb_scheme: "internet-facing"
+alb_cert_arn: "arn:aws:acm:us-east-2:226861556001:certificate/5b716b9a-1038-4c7d-9515-079c38d017d2"
+alb_listener_ports: '[{"HTTPS":443}, {"HTTP":80}]'
+alb_target_type: "ip"
+alb_healthcheck_protocol: "HTTP"
+alb_healthcheck_port: "80"
+alb_healthcheck_path: "/Telehealth"
+alb_healthcheck_interval_seconds: "100"
+alb_healthcheck_timeout_seconds: "5"
+alb_healthcheck_success_codes: "200"
+alb_healthcheck_healthy_threshold_count: "2"
+alb_healthcheck_unhealthy_threshold: "3"
+
+#############################
+# SSO variables
+base_url_proxy_domain: "clb-dev-member-sso.zyterk8s.net"
+sso_backend_protocol: "https"
+sso_ssl_cert_arn: "arn:aws:acm:us-east-2:226861556001:certificate/5b716b9a-1038-4c7d-9515-079c38d017d2"
+sso_svc_port: "443"
+sso_svc_type: "LoadBalancer"
+sso_cn_target_port: "8090"
+sso_member_target_port: "8091"
+sso_svc_protocol: "TCP"
+sso_saml_metadata_secret_name: "sso-saml-metadata"
+sso_cn_saml_certs_secret_name: "sso-cn-saml-cert"
+sso_member_saml_certs_secret_name: "sso-member-saml-cert"
+sso_saml_ssl_path: "/opt/zyter/sso/ssl"
+
+#############################
+# Kafka related variables
+
+messageKafkaTopicName: "CLB_K8s.MEMBER_TO_CARENAVIGATOR_MESSAGE"
+messageStatusKafkaTopicName: "CLB_K8s.CARENAVIGATOR_TO_MEMBER_MESSAGE_STATUS"
+kafka_broker_consumer_group: "zyter_message_router_group"
+kafka_broker_url: "b-1.collabmskclusterscram.iie6xe.c7.kafka.us-east-2.amazonaws.com:9096,b-2.collabmskclusterscram.iie6xe.c7.kafka.us-east-2.amazonaws.com:9096,b-3.collabmskclusterscram.iie6xe.c7.kafka.us-east-2.amazonaws.com:9096"
+kafkaConsumerSecurityProtocol: "SASL_SSL"
+saslAuthMechanism: "SCRAM-SHA-512"
+scramUsername: "testuser"
+scramPassword: "testsecret"
+scramSecretName: "AmazonMSK_collab_cluster"
+awsSecretManagerRegion: "us-east-2"
+
+#############################
+# Auth related values
+
+sso_login_protocol: "OIDC"
+sso_oidc_env_cm_name: "zytersso-oidc-cm"
+sso_oidc_env_secret_name: "zytersso-oidc-secret"
+sso_oidc_proxy_domain: "clb-dev-oidc.zyterk8s.net"
+auth_proxy_context: "/collaborate-auth"
+auth_proxy_port: "8092"
+oidc_username_attribute: "preferred_username"
+# OKTA app credentials with CODE GRANT FLOW ( FOR USER LOGIN)
+oidc_secret_client_id_key: "OIDC_CLIENT_ID"
+oidc_secret_client_secret_key: "OIDC_CLIENT_SECRET"
+
+okta_url: "zyter.okta.com"
+
+#OKTA app credentials with client credentials flow (for TRUCARE API authentication & Authorization))
+client_id: "sample-client-id"
+client_secret: "sample-client-secret"
+trueCareUrl: "qa-sp-app-vm02.qa.cninc.com"
+trueCarePort: "8443"
+trucareAdminUserName: "tcadminsample" 
+trucareAdminPass: "Jaro20222022samplepass"
+trucareSamlAuth: "dummy-YXBpX3VzZXI6aDA4bm1MMENzQndqQkhwMzl1SVY5cDhZRW9lN28zeFo="
+trucareSamlPassword: "dummyPassword1"
+trucareSamlGrantType: "dummypassword"
+trucareSecretName: "trucare-admin-creds-secret"
+awsSecretManagerRegion: "us-east-2"
+
+####################################
+# Service Account variables
+
+serviceaccount:
+  zyter_chatweb_irsa_arn: "arn:aws:iam::226861556001:role/zyterchatweb-irsa"
+  zyter_chatweb_irsa_name: "zyter-chatweb-irsa"
+  zyter_websocket_irsa_arn: "arn:aws:iam::226861556001:role/zyterwebsocket-irsa"
+  zyter_websocket_irsa_name: "zyter-websocket-irsa"
+
+#############################
+# Image level variables
+
+zyterchatweb:
+  repository: "zyterchatweb"
+  name: "zyterchatweb"
+  tier: "rpm-frontend"
+  replicas: 1
+  tag: "dev-collaborate-3.0.3-1"
+  config_path: "/opt/zyter/config/ChatWeb/application.properties"
+  ssl_cert_path: "/opt/zyter/certificates/zyternet.pfx"
+  mem_request: "400Mi"
+  mem_limit: "1Gi"
+  cpu_request: "10m"
+  cpu_limit: "600m"
+  storage_request: "100Mi"
+  storage_limit: "1Gi"
+
+zyterusermgmtweb:
+  repository: "zyterusermgmtweb"
+  name: "zyterusermgmtweb"
+  tier: "rpm-frontend"
+  replicas: 1
+  tag: "dev-collaborate-3.0.3-1"
+  config_path: "/opt/zyter/config/UserManagementWeb/application.properties"
+  ssl_cert_path: "/opt/zyter/certificates/zyternet.pfx"
+  mem_request: "350Mi"
+  mem_limit: "600Mi"
+  cpu_request: "10m"
+  cpu_limit: "500m"
+  storage_request: "100Mi"
+  storage_limit: "1Gi"
+
+zyterchatservice:
+  repository: "zyterchatservice"
+  name: "zyterchatservice"
+  tier: "core-backend"
+  replicas: 1
+  tag: "dev-collaborate-3.0.3-1"
+  config_path: "/opt/zyter/config/ChatService/application.properties"
+  ssl_cert_path: "/opt/zyter/certificates/zyternet.pfx"
+  mem_request: "350Mi"
+  mem_limit: "1.2Gi"
+  cpu_request: "10m"
+  cpu_limit: "500m"
+  storage_request: "100Mi"
+  storage_limit: "1Gi"
+
+zyterusermgmtservice:
+  repository: "zyterusermgmtservice"
+  name: "zyterusermgmtservice"
+  tier: "core-backend"
+  replicas: 1
+  tag: "dev-collaborate-3.0.3-1"
+  config_path: "/opt/zyter/config/UserManagement/application.properties"
+  ssl_cert_path: "/opt/zyter/certificates/zyternet.pfx"
+  mem_request: "350Mi"
+  mem_limit: "1.5Gi"
+  cpu_request: "10m"
+  cpu_limit: "500m"
+  storage_request: "100Mi"
+  storage_limit: "1Gi"
+
+zyterwebsocket:
+  repository: "zyterwebsocket"
+  name: "zyterwebsocket"
+  tier: "core-backend"
+  replicas: 1
+  tag: "dev-collaborate-3.0.3-1"
+  config_path: "/opt/zyter/config/WebSocket/application.properties"
+  ssl_cert_path: "/opt/zyter/certificates/zyternet.pfx"
+  mem_request: "350Mi"
+  mem_limit: "600Mi"
+  cpu_request: "10m"
+  cpu_limit: "500m"
+  storage_request: "100Mi"
+  storage_limit: "1Gi"
+
+zyteremailservice:
+  repository: "zyteremailservice"
+  name: "zyteremailservice"
+  tier: "core-backend"
+  replicas: 1
+  tag: "dev-collaborate-3.0.3-1"
+  config_path: "/opt/zyter/config/EmailService/application.properties"
+  ssl_cert_path: "/opt/zyter/certificates/zyternet.pfx"
+  mem_request: "250Mi"
+  mem_limit: "400Mi"
+  cpu_request: "10m"
+  cpu_limit: "300m"
+  storage_request: "100Mi"
+  storage_limit: "1Gi"
+
+zytersso_cn:
+  repository: "zytersso_cn"
+  name: "zytersso-cn"
+  tier: "core-backend"
+  replicas: 1
+  tag: "dev-collaborate-3.0.2-2"
+  sso_files_read_only: true
+  cn_metadata_volume_name: "cn-metadata"
+  cn_metadata_file_name: "cn-metadata.xml"
+  cn_metadata_secret_key: "cn-metadata"
+  cn_cert_volume_name: "sp-tc-certs"
+  mem_request: "250Mi"
+  mem_limit: "400Mi"
+  cpu_request: "10m"
+  cpu_limit: "300m"
+  storage_request: "100Mi"
+  storage_limit: "1Gi"
+
+zytersso_member:
+  repository: "zytersso_member"
+  name: "zytersso-member"
+  tier: "core-backend"
+  replicas: 1
+  tag: "dev-collaborate-3.0.2-2"
+  sso_files_read_only: true
+  member_metadata_volume_name: "member-metadata"
+  member_metadata_file_name: "member-metadata.xml"
+  member_metadata_secret_key: "member-metadata"
+  member_cert_volume_name: "sp-ev-certs"
+  mem_request: "250Mi"
+  mem_limit: "400Mi"
+  cpu_request: "10m"
+  cpu_limit: "300m"
+  storage_request: "100Mi"
+  storage_limit: "1Gi"
+
+zytersso_oidc:
+  repository: "zytersso_oidc"
+  name: "zytersso-oidc"
+  tier: "core-backend"
+  replicas: 1
+  tag: "dev-collaborate-3.0.3-3"
+  sso_files_read_only: true
+  mem_request: "250Mi"
+  mem_limit: "400Mi"
+  cpu_request: "10m"
+  cpu_limit: "300m"
+  storage_request: "100Mi"
+  storage_limit: "1Gi"
+
+
+#################################################################################################
+# Unused images values (3.0.0.0.0 and above) for config map references and backward compatability
+#
+zyterweb:
+  repository: "zyterweb"
+  name: "zyterweb"
+  tier: "rpm-frontend"
+  replicas: 1
+  tag: "release-2.2.1"
+  config_path: "/opt/zyter/config/ZyterWeb/application.properties"
+  ssl_cert_path: "/opt/zyter/certificates/zyternet.pfx"
+  mem_request: "250Mi"
+  mem_limit: "400Mi"
+  cpu_request: "10m"
+  cpu_limit: "300m"
+  storage_request: "100Mi"
+  storage_limit: "1Gi"
+
+zyterrpmmgmtservice:
+  repository: "zyterrpmmgmtservice"
+  name: "zyterrpmmgmtservice"
+  tier: "rpm-backend"
+  replicas: 1
+  tag: "release-2.2.1"
+  config_path: "/opt/zyter/config/RPMUserMgmtService/application.properties"
+  ssl_cert_path: "/opt/zyter/certificates/zyternet.pfx"
+  mem_request: "350Mi"
+  mem_limit: "600Mi"
+  cpu_request: "10m"
+  cpu_limit: "500m"
+  storage_request: "100Mi"
+  storage_limit: "1Gi"
+
+zyterplustelemgmtservice:
+  repository: "zyterplustelemgmtservice"
+  name: "zyterplustelemgmtservice"
+  tier: "rpm-backend"
+  replicas: 1
+  tag: "release-2.2.1"
+  config_path: "/opt/zyter/config/UserManagement/application.properties"
+  ssl_cert_path: "/opt/zyter/certificates/zyternet.pfx"
+  mem_request: "250Mi"
+  mem_limit: "1Gi"
+  cpu_request: "10m"
+  cpu_limit: "300m"
+  storage_request: "100Mi"
+  storage_limit: "1Gi"
+
+zyterplustelehealthservice:
+  repository: "zyterplustelehealthservice"
+  name: "zyterplustelehealthservice"
+  tier: "rpm-backend"
+  replicas: 1
+  tag: "release-2.2.1"
+  config_path: "/opt/zyter/config/Telehealth/application.properties"
+  ssl_cert_path: "/opt/zyter/certificates/zyternet.pfx"
+  mem_request: "250Mi"
+  mem_limit: "400Mi"
+  cpu_request: "10m"
+  cpu_limit: "300m"
+  storage_request: "100Mi"
+  storage_limit: "1Gi"
+
+zyterplusappointmentservice:
+  repository: "zyterplusappointmentservice"
+  name: "zyterplusappointmentservice"
+  tier: "core-backend"
+  replicas: 1
+  tag: "release-2.2.1"
+  config_path: "/opt/zyter/config/Appointment/application.properties"
+  ssl_cert_path: "/opt/zyter/certificates/zyternet.pfx"
+  mem_request: "250Mi"
+  mem_limit: "400Mi"
+  cpu_request: "10m"
+  cpu_limit: "300m"
+  storage_request: "100Mi"
+  storage_limit: "1Gi"
+
+zyterecc:
+  repository: "zyterecc"
+  name: "zyterecc"
+  tier: "core-backend"
+  replicas: 1
+  tag: "release-2.2.1"
+  config_path: "/opt/zyter/config/ECC/application.properties"
+  ssl_cert_path: "/opt/zyter/certificates/zyternet.pfx"
+  mem_request: "250Mi"
+  mem_limit: "400Mi"
+  cpu_request: "10m"
+  cpu_limit: "300m"
+  storage_request: "100Mi"
+  storage_limit: "1Gi"
+
+zytersftservice:
+  repository: "zytersftservice"
+  name: "zytersftservice"
+  tier: "core-backend"
+  replicas: 1
+  tag: "release-2.2.1"
+  config_path: "/opt/zyter/config/SecureFileTransfer/application.properties"
+  ssl_cert_path: "/opt/zyter/certificates/zyternet.pfx"
+  mem_request: "250Mi"
+  mem_limit: "400Mi"
+  cpu_request: "10m"
+  cpu_limit: "300m"
+  storage_request: "100Mi"
+  storage_limit: "1Gi"
+
+zyteremsservice:
+  repository: "zyteremsservice"
+  name: "zyteremsservice"
+  tier: "core-backend"
+  replicas: 1
+  tag: "release-2.2.1"
+  config_path: "/opt/zyter/config/EMS/application.properties"
+  ssl_cert_path: "/opt/zyter/certificates/zyternet.pfx"
+  mem_request: "250Mi"
+  mem_limit: "400Mi"
+  cpu_request: "10m"
+  cpu_limit: "300m"
+  storage_request: "100Mi"
+  storage_limit: "1Gi"
+
+zyterschema:
+  repository: "zyterschema"
+  name: "zyterschema"
+  tier: "core-backend"
+  replicas: 1
+  tag: "release-2.2.1"
+  config_path: "/opt/zyter/config/ZyterSchemaService/application.properties"
+  ssl_cert_path: "/opt/zyter/certificates/zyternet.pfx"
+  mem_request: "250Mi"
+  mem_limit: "400Mi"
+  cpu_request: "10m"
+  cpu_limit: "300m"
+  storage_request: "100Mi"
+  storage_limit: "1Gi"
+
+####################################
+# Zyter ConfigMaps related variable
+
+zyter_cm_read_only: true
+zyter_cm_key: "application.properties"
+zyter_cm_relative_path: "application.properties"
+zyter_common_cm_name: "common"
+zyter_common_cm_path: "/opt/zyter/config/Common/application.properties"
+
+application_properties_sub_path: "application.properties"
+
+####################################
+# SMTP related variables
+
+smtp_sender_mail_id: "zyter.admin@infinite.com"
+smtp_username: "zyteradmin@infinite.com"
+smtp_password: "sept@2016"
+smtp_host: "smtp.office365.com"
+smtp_port: 587
+
+###########################################
+#persistent volume variables for chat_files (attachments and media)
+
+chat_mount_path: "/opt/zyter/chat_files"
+chat_mount_name: "chat-files-persistent-storage"
+persistent_claim_name: "efs-claim"
+persistent_sc_name: "efs-sc"
+persistent_sc_resource_request: "2Gi"                     
+persistent_sc_accessmode: "ReadWriteMany"
+persistent_sc_provisioner: "efs.csi.aws.com"
+persistent_sc_provisioningmode: "efs-ap"
+persistent_sc_filesystemid: "fs-076367439ecd9753b"
+persistent_sc_directory_perms: "700"
+
+####################################
+# Default variables from helm create
+ 
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+podAnnotations: {}
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+service:
+  type: ClusterIP
+  port: 80
+
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  hosts:
+    - host: chart-example.local
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
+
+resources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}

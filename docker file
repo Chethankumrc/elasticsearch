@@ -1,0 +1,21 @@
+FROM alpine
+
+RUN mkdir /opt/tomcat/
+
+WORKDIR /opt/tomcat
+
+RUN apk update
+
+RUN apk add curl
+
+RUN curl -O https://downloads.apache.org/tomcat/tomcat-9/v9.0.76/bin/apache-tomcat-9.0.76.tar.gz
+
+RUN tar xzf apache-tomcat-9.0.76.tar.gz
+
+RUN rm apache-tomcat-9.0.76.tar.gz
+
+RUN mv apache-tomcat-9.0.76/* /opt/tomcat/.
+
+RUN apk update
+
+RUN apk add openjdk11-jre
